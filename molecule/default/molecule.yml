@@ -1,0 +1,21 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
+  flake8
+platforms:
+  - name: rocky8
+    image: geerlingguy/docker-rockylinux8-ansible
+    pre_build_image: true
+provisioner:
+  name: ansible
+    #lint:
+    #  name: ansible-lint
+verifier:
+  name: testinfra
+    #v: 1

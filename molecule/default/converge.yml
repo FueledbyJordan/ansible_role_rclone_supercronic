@@ -1,0 +1,15 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    rclone_conf_dir: '/etc/rclone'
+    rclone_user: 1000
+    rclone_group: 1000
+    rclone_scripts:
+      - { path: 'some_stub.sh', cron: '45 8 * * *' }
+    rclone_backends:
+      - { backend_name: 'Something', type: 's3', key_id: 'fdsa', key: 'asdf' }
+  tasks:
+    - name: "Include fueledbyjordan.ansible_role_rclone_supercronic"
+      ansible.builtin.include_role:
+        name: "fueledbyjordan.ansible_role_rclone_supercronic"

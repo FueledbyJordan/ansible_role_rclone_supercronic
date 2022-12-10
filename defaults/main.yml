@@ -1,0 +1,8 @@
+---
+# defaults file for ansible_role_rclone_supercronic
+
+rclone_conf_dir: null
+rclone_user: null
+rclone_group: null
+rclone_scripts: null
+rclone_backends: null

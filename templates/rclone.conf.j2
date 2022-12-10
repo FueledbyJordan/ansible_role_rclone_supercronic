@@ -1,0 +1,8 @@
+{% for entry in rclone_backends %}
+[{{ entry.backend_name }}]
+type = {{ entry.type }}
+account = {{ entry.key_id }}
+key = {{ entry.key }}
+hard_delete = true
+
+{% endfor %}

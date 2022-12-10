@@ -1,0 +1,72 @@
+---
+# tasks file for ansible-role-rclone-supercronic
+
+- name: Check vars set
+  ansible.builtin.assert:
+    that:
+      - rclone_conf_dir | d(False)
+      - rclone_user | d(False)
+      - rclone_group | d(False)
+
+- name: Check rclone backends
+  ansible.builtin.assert:
+    that:
+      - rclone_backends | length > 0
+
+- name: Check rclone backends contents
+  ansible.builtin.assert:
+    that:
+      - item.backend_name | d(False)
+      - item.type | d(False)
+      - item.key_id | d(False)
+      - item.key | d(False)
+  with_items: "{{ rclone_backends }}"
+
+- name: Place rclone configuration dir
+  ansible.builtin.file:
+    state: directory
+    path:  "{{ rclone_conf_dir }}"
+    owner: "{{ rclone_user }}"
+    group: "{{ rclone_group }}"
+    mode: '0755'
+
+- name: Place rclone config directory
+  ansible.builtin.file:
+    state: directory
+    path:  "{{ rclone_conf_dir }}/config"
+    owner: "{{ rclone_user }}"
+    group: "{{ rclone_group }}"
+    mode: '0755'
+
+- name: Place rclone scripts directory
+  ansible.builtin.file:
+    state: directory
+    path:  "{{ rclone_conf_dir }}/scripts"
+    owner: "{{ rclone_user }}"
+    group: "{{ rclone_group }}"
+    mode: '0755'
+
+- name: Place rclone config
+  ansible.builtin.template:
+    src: rclone.conf.j2
+    dest: "{{ rclone_conf_dir }}/config/rclone.conf"
+    owner: "{{ rclone_user }}"
+    group: "{{ rclone_group }}"
+    mode: '0600'
+
+- name: Place custom scripts
+  ansible.builtin.template:
+    src: "{{ item.path }}.j2"
+    dest: "{{ rclone_conf_dir }}/scripts/{{ item.path | basename | replace('.', '_') }}"
+    owner: "{{ rclone_user }}"
+    group: "{{ rclone_group }}"
+    mode: '0700'
+  loop: "{{ rclone_scripts }}"
+
+- name: Place crontab
+  ansible.builtin.template:
+    src: crontab.j2
+    dest: "{{ rclone_conf_dir }}/config/crontab"
+    owner: "{{ rclone_user }}"
+    group: "{{ rclone_group }}"
+    mode: '0644'
