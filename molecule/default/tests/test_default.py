@@ -43,4 +43,4 @@ def test_rclone_crontab(host):
     assert rclone_conf.uid == 1000
     assert rclone_conf.gid == 1000
     assert rclone_conf.mode == 0o644
-    assert rclone_conf.content_string == '45 8 * * * /etc/rclone/scripts/some_stub_sh\n' # noqa E501
+    assert rclone_conf.content_string == '45 8 * * * /scripts/some_stub_sh\n' # noqa E501
